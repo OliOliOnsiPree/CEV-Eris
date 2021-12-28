@@ -29,6 +29,10 @@
 	var/excelsior = FALSE
 	anchored = FALSE
 
+/obj/item/mine/Initialize()
+	. = ..()
+	update_icon()
+
 /obj/item/mine/excelsior
 	name = "Excelsior mine"
 	desc = "An anti-personnel mine. IFF technology grants safe passage to Excelsior agents, and a merciful brief end to others, unless they have a Pulse tool nearby."
@@ -110,6 +114,7 @@
 			anchored = TRUE
 			armed = TRUE
 			update_icon()
+			log_admin("[key_name(user)] has placed \a [src] at ([x],[y],[z]).")
 
 	update_icon()
 

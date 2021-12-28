@@ -58,13 +58,13 @@
 /datum/uplink_item/item/visible_weapons/rigged
 	name = "Weapon reverse loader"
 	item_cost = 5
-	antag_roles = list(ROLE_TRAITOR,ROLE_MARSHAL,ROLE_INQUISITOR,ROLE_MERCENARY,ROLE_CARRION)
+	antag_roles = list(ROLE_CONTRACTOR,ROLE_MARSHAL,ROLE_INQUISITOR,ROLE_MERCENARY,ROLE_CARRION)
 	path = /obj/item/gun_upgrade/mechanism/reverse_loader
 
 /datum/uplink_item/item/visible_weapons/boom_trigger
 	name = "Syndicate \"Self Desturct\" trigger"
 	item_cost = 5
-	antag_roles = list(ROLE_TRAITOR,ROLE_MARSHAL,ROLE_INQUISITOR,ROLE_MERCENARY,ROLE_CARRION)
+	antag_roles = list(ROLE_CONTRACTOR,ROLE_MARSHAL,ROLE_INQUISITOR,ROLE_MERCENARY,ROLE_CARRION)
 	path = /obj/item/gun_upgrade/trigger/boom
 
 /datum/uplink_item/item/visible_weapons/dna_trigger
@@ -81,6 +81,11 @@
 	name = "Syndicate \"Gauss Coil\" barrel"
 	item_cost = 7
 	path = /obj/item/gun_upgrade/barrel/gauss
+
+/datum/uplink_item/item/visible_weapons/blender
+	name = "OR \"Bullet Blender\" barrel"
+	item_cost = 5
+	path = /obj/item/gun_upgrade/barrel/blender
 
 /datum/uplink_item/item/visible_weapons/psychic_lasercannon
 	name = "Prototype: psychic laser cannon"

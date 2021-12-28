@@ -52,11 +52,11 @@
 	else if (health < max_health * 0.25)
 		to_chat(user, SPAN_DANGER("It's seriously fucked up!"))
 	else if (health < max_health * 0.50)
-		to_chat(user, SPAN_DANGER("It's very damaged, you can almost see the components inside!"))
+		to_chat(user, SPAN_DANGER("It's very damaged; you can almost see the components inside!"))
 	else if (health < max_health * 0.75)
 		to_chat(user, SPAN_WARNING("It has numerous dents and deep scratches."))
 	else if (health < max_health)
-		to_chat(user, SPAN_WARNING("It's a bit scratched and has dents."))
+		to_chat(user, SPAN_WARNING("It's a bit scratched and dented."))
 
 
 /obj/machinery/hivemind_machine/Process()
@@ -254,6 +254,8 @@
 
 /obj/machinery/hivemind_machine/bullet_act(obj/item/projectile/Proj)
 	take_damage(Proj.get_structure_damage())
+	if(istype(Proj, /obj/item/projectile/ion))
+		Proj.on_hit(loc)
 	. = ..()
 
 

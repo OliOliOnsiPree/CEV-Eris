@@ -135,7 +135,7 @@ var/list/mob_hat_cache = list()
 	additional_law_channels["Drone"] = "d"
 	if(!laws) laws = new law_type
 
-	flavor_text = "It's a tiny little repair drone. The casing is stamped with an corporate logo and the subscript: '[company_name] Recursive Repair Systems: Fixing Tomorrow's Problem, Today!'"
+	flavor_text = "A tiny little repair drone. The casing is stamped with an corporate logo and the subscript: '[company_name] Recursive Repair Systems: Fixing Tomorrow's Problem, Today!'"
 	playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 0)
 
 //Redefining some robot procs...
@@ -376,8 +376,9 @@ var/list/mob_hat_cache = list()
 
 /mob/living/silicon/robot/drone/aibound/proc/back_to_core()
 	if(bound_ai && mind)
-		bound_ai.ckey = ckey
+		mind.active = 0 // We want to transfer the key manually
 		mind.transfer_to(bound_ai) // Transfer mind to AI core
+		bound_ai.key = key // Manually transfer the key to log them in
 	else
 		to_chat(src, SPAN_WARNING("No AI core detected."))
 

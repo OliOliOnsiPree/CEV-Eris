@@ -38,6 +38,14 @@
 	set_light(0)
 	return TRUE
 
+/obj/item/projectile/bullet/rocket/scrap
+	damage_types = list(BRUTE = 30)
+
+/obj/item/projectile/bullet/rocket/scrap/on_hit(atom/target)
+	explosion(target, -1, -1, 0, 3)
+	set_light(0)
+	return TRUE
+
 /obj/item/projectile/temp
 	name = "freeze beam"
 	icon_state = "ice_2"
@@ -176,7 +184,7 @@
 	damage_types = list(BRUTE = 24)
 	kill_count = 16
 	armor_penetration = 0
-	step_delay = 3
+	step_delay = 2
 	eyeblur = 2 // bright light slightly blurs your vision
 	luminosity_range = 5
 	luminosity_power = 1
