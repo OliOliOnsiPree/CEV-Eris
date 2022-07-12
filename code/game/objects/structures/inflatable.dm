@@ -2,6 +2,7 @@
 	name = "inflatable"
 	w_class = ITEM_SIZE_SMALL
 	icon = 'icons/obj/inflatable.dmi'
+	price_tag = 40
 	var/deploy_path = null
 
 /obj/item/inflatable/attack_self(mob/user)
@@ -191,7 +192,7 @@
 
 /obj/structure/inflatable/door/proc/Open()
 	isSwitchingStates = 1
-	FLICK("door_opening", src)
+	flick("door_opening", src)
 	sleep(10)
 	density = FALSE
 	state = 1
@@ -200,14 +201,14 @@
 
 /obj/structure/inflatable/door/proc/Close()
 	isSwitchingStates = 1
-	FLICK("door_closing", src)
+	flick("door_closing", src)
 	sleep(10)
 	density = TRUE
 	state = 0
 	update_icon()
 	isSwitchingStates = 0
 
-/obj/structure/inflatable/door/on_update_icon()
+/obj/structure/inflatable/door/update_icon()
 	if(state)
 		icon_state = "door_open"
 	else

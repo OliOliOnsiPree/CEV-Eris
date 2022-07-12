@@ -1,4 +1,4 @@
-#define ARMOR_HALLOS_COEFFICIENT 0.4
+#define ARMOR_HALLOS_COEFFICIENT 0.1
 #define ARMOR_GDR_COEFFICIENT 0.1
 
 //This calculation replaces old run_armor_check in favor of more complex and better system
@@ -45,7 +45,7 @@
 	if(ishuman(src) && isitem(used_weapon))
 		var/mob/living/carbon/human/H = src
 		var/obj/item/I = used_weapon
-		if((is_carrion(H) || mutations.len) && (SANCTIFIED in I.aspects))
+		if((is_carrion(H) || active_mutations.len) && (SANCTIFIED in I.aspects))
 			sanctified_attack = TRUE
 	//Feedback
 	//In order to show both target and everyone around that armor is actually working, we are going to send message for both of them
@@ -128,6 +128,10 @@
 		to_chat(src, SPAN_WARNING("You have been hit by [P]!"))
 		qdel(P)
 		return TRUE
+	
+	if(P.agony > 0)
+		hit_impact(P.agony, hit_dir)
+		damage_through_armor(P.agony, HALLOSS, def_zone, P.check_armour, armour_pen = P.armor_penetration, used_weapon = P, sharp = is_sharp(P), edge = has_edge(P))
 
 	if(P.knockback && hit_dir)
 		throw_at(get_edge_target_turf(src, hit_dir), P.knockback, P.knockback)
@@ -138,11 +142,6 @@
 		for(var/damage_type in P.damage_types)
 			var/damage = P.damage_types[damage_type]
 			damage_through_armor(damage, damage_type, def_zone, P.check_armour, armour_pen = P.armor_penetration, used_weapon = P, sharp=is_sharp(P), edge=has_edge(P))
-
-	if(P.agony > 0 && istype(P,/obj/item/projectile/bullet))
-		hit_impact(P.agony, hit_dir)
-		damage_through_armor(P.agony, HALLOSS, def_zone, P.check_armour, armour_pen = P.armor_penetration, used_weapon = P, sharp = is_sharp(P), edge = has_edge(P))
-
 
 	P.on_hit(src, def_zone)
 	return TRUE
@@ -199,8 +198,8 @@
 		return FALSE
 
 	//Hulk modifier
-	if(HULK in user.mutations)
-		effective_force *= 2
+//	if(HULK in user.mutations)
+//		effective_force *= 2
 
 	//Apply weapon damage
 	if (damage_through_armor(effective_force, I.damtype, hit_zone, ARMOR_MELEE, I.armor_penetration, used_weapon = I, sharp = is_sharp(I), edge = has_edge(I)))
@@ -351,6 +350,9 @@
 
 	var/turf/location = get_turf(src)
 	location.hotspot_expose(fire_burn_temperature(), 50, 1)
+	if (ishuman(src))
+		var/mob/living/carbon/human/stylish = src
+		stylish.regen_slickness() // being on fire is cool, but don't try this at home
 
 /mob/living/fire_act()
 	adjust_fire_stacks(2)

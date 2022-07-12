@@ -21,6 +21,8 @@
 		WEAPON_CHARGE
 	)
 	twohanded = TRUE
+	init_recoil = CARBINE_RECOIL(1)
+	serial_type = "NT"
 
 /obj/item/gun/energy/laser/mounted
 	self_recharge = TRUE
@@ -71,11 +73,13 @@
 	price_tag = 750
 	init_firemodes = list(
 		WEAPON_NORMAL,
-		BURST_2_ROUND
+		BURST_2_BEAM
 	)
 	twohanded = TRUE
 	saw_off = TRUE
 	sawn = /obj/item/gun/energy/retro/sawn
+	init_recoil = CARBINE_RECOIL(1)
+	serial_type = "OS"
 
 /obj/item/gun/energy/retro/sawn
 	name = "sawn down OS LG \"Cog\""
@@ -96,6 +100,7 @@
 	twohanded = FALSE
 	saw_off = FALSE
 	spawn_blacklisted = TRUE
+	init_recoil = SMG_RECOIL(1)
 
 /obj/item/gun/energy/captain
 	name = "NT LG \"Destiny\""
@@ -122,6 +127,8 @@
 	)
 	twohanded = FALSE
 	spawn_blacklisted = TRUE//antag_item_targets
+	init_recoil = HANDGUN_RECOIL(1)
+	serial_type = "NT"
 
 /obj/item/gun/energy/lasercannon
 	name = "Prototype: laser cannon"
@@ -145,6 +152,7 @@
 		WEAPON_NORMAL
 		)
 	twohanded = TRUE
+	init_recoil = LMG_RECOIL(1)
 
 /obj/item/gun/energy/lasercannon/mounted
 	name = "mounted laser cannon"
@@ -170,7 +178,7 @@
 	var/datum/mind/owner
 	var/list/victims = list()
 	var/datum/antag_contract/derail/contract
-	pierce_multiplier = 2
+	pierce_multiplier = 4
 
 /obj/item/gun/energy/psychic/Initialize()
 	..()
@@ -241,7 +249,7 @@
 	force = WEAPON_FORCE_NORMAL
 	slot_flags = SLOT_BELT|SLOT_BACK
 	contractor = TRUE
-	pierce_multiplier = 2
+	pierce_multiplier = 4
 	zoom_factor = 0
 	damage_multiplier = 1
 	charge_cost = 50
@@ -253,6 +261,7 @@
 		WEAPON_CHARGE
 		)
 	twohanded = FALSE
+	init_recoil = LMG_RECOIL(1)
 
 /obj/item/gun/energy/psychic/mindflayer
 	name = "Prototype: mind flayer"
@@ -266,6 +275,7 @@
 	price_tag = 2200
 	matter = list(MATERIAL_PLASTEEL = 15, MATERIAL_SILVER = 5, MATERIAL_PLASMA = 3)
 	twohanded = FALSE
+	init_recoil = HANDGUN_RECOIL(1)
 
 /obj/item/gun/energy/laser/makeshift
 	name = "makeshift laser carbine"
@@ -286,4 +296,5 @@
 	init_firemodes = list(
 		WEAPON_NORMAL
 	)
-	spawn_blacklisted = TRUE
+	spawn_tags = SPAWN_TAG_GUN_HANDMADE
+	init_recoil = CARBINE_RECOIL(1)

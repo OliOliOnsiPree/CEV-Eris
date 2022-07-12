@@ -54,7 +54,7 @@
 		if(!cell.check_charge(hitcost))	//do we have enough power for another hit?
 			set_status(FALSE)
 
-/obj/item/melee/baton/on_update_icon()
+/obj/item/melee/baton/update_icon()
 	if(status)
 		icon_state = "[initial(icon_state)]_active"
 	else if(!cell)
@@ -90,11 +90,12 @@
 	add_fingerprint(user)
 
 /obj/item/melee/baton/attack(mob/M, mob/user)
-	if(status && (CLUMSY in user.mutations) && prob(50))
+/*	if(status && (CLUMSY in user.mutations) && prob(50))
 		to_chat(user, SPAN_DANGER("You accidentally hit yourself with the [src]!"))
 		user.Weaken(30)
 		deductcharge(hitcost)
 		return
+*/
 	return ..()
 
 /obj/item/melee/baton/apply_hit_effect(mob/living/target, mob/living/user, var/hit_zone)

@@ -36,8 +36,8 @@
 				return 0
 			var/obj/item/organ/external/affecting = get_organ(ran_zone(H.targeted_organ))
 
-			if(HULK in H.mutations)
-				damage += 5
+//			if(HULK in H.mutations)
+//				damage += 5
 
 			playsound(loc, "punch", 25, 1, -1)
 
@@ -228,9 +228,9 @@
 			real_damage += attack.get_unarmed_damage(H)
 			real_damage *= damage_multiplier
 			stat_damage *= damage_multiplier
-			if(HULK in H.mutations)
-				real_damage *= 2 // Hulks do twice the damage
-				stat_damage *= 2
+//			if(HULK in H.mutations)
+//				real_damage *= 2 // Hulks do twice the damage
+//				stat_damage *= 2
 			real_damage = max(1, real_damage)
 
 			// Apply additional unarmed effects.
@@ -279,12 +279,18 @@
 							playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 							visible_message(SPAN_WARNING("[M] attempted to disarm [src]"))
 							return
+					if (ishuman(M))
+						var/mob/living/carbon/human/stylish = M
+						stylish.regen_slickness() // disarming your opponent looks slick
+					regen_slickness(-1) // being disarmed looks clumsy
+					dodge_time = get_game_time()
+					confidence = FALSE
 					if(istype(I, /obj/item/twohanded/offhand)) //did someone dare to switch to offhand to not get disarmed?
 						unEquip(src.get_inactive_hand())
 						visible_message(SPAN_DANGER("[M] has disarmed [src]!"))
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 						return
-					else 
+					else
 						unEquip(I)
 						visible_message(SPAN_DANGER("[M] has disarmed [src]!"))
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
@@ -308,9 +314,13 @@
 
 	user.do_attack_animation(src)
 
+	var/penetration = 0
+	if(istype(user, /mob/living))
+		var/mob/living/L = user
+		penetration = L.armor_penetration
 	var/dam_zone = pick(organs_by_name)
 	var/obj/item/organ/external/affecting = get_organ(ran_zone(dam_zone))
-	var/dam = damage_through_armor(damage, BRUTE, affecting, ARMOR_MELEE, sharp=is_sharp, sharp=is_edge)
+	var/dam = damage_through_armor(damage, BRUTE, affecting, ARMOR_MELEE, penetration, sharp=is_sharp, edge=is_edge)
 	if(dam > 0)
 		affecting.add_autopsy_data("[attack_message] by \a [user]", dam)
 	updatehealth()
@@ -337,7 +347,7 @@
 		return 0
 
 	user.visible_message(SPAN_WARNING("[user] begins to dislocate [src]'s [organ.joint]!"))
-	if(do_after(user, 100, progress = 0))
+	if(do_after(user, 100))
 		organ.dislocate(1)
 		src.visible_message("<span class='danger'>[src]'s [organ.joint] [pick("gives way","caves in","crumbles","collapses")]!</span>")
 		playsound(user, 'sound/weapons/jointORbonebreak.ogg', 50, 1)
@@ -367,3 +377,4 @@
 		spawn(1)
 			qdel(rgrab)
 	return success
+  

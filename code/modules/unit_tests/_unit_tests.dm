@@ -42,7 +42,7 @@
 
 // #include "anchored_mobs.dm"
 // #include "bespoke_id.dm"
-// #include "binary_insert.dm"
+#include "binary_insert.dm"
 // #include "bloody_footprints.dm"
 // #include "breath.dm"
 // #include "card_mismatch.dm"
@@ -55,7 +55,6 @@
 // #include "designs.dm"
 // #include "dynamic_ruleset_sanity.dm"
 // #include "emoting.dm"
-#include "extension_sanity.dm"
 // #include "food_edibility_check.dm"
 // #include "glasses_vision.dm" // disabled due to the ci itself being broken
 // #include "heretic_knowledge.dm"
@@ -102,7 +101,7 @@
 // #include "wizard.dm"
 
 #ifdef REFERENCE_TRACKING //Don't try and parse this file if ref tracking isn't turned on. IE: don't parse ref tracking please mr linter
-// #include "find_reference_sanity.dm"
+#include "find_reference_sanity.dm"
 #endif
 
 #undef TEST_ASSERT

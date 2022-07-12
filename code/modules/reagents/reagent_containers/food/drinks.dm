@@ -61,7 +61,7 @@
 /obj/item/reagent_containers/food/drinks/feed_sound(var/mob/user)
 	playsound(user.loc, 'sound/items/drink.ogg', rand(10, 50), 1)
 
-/obj/item/reagent_containers/food/drinks/on_update_icon()
+/obj/item/reagent_containers/food/drinks/update_icon()
 	cut_overlays()
 	if(reagents && reagents.total_volume)
 		if(base_name)
@@ -161,13 +161,9 @@
 	filling_states = "100"
 	preloaded_reagents = list("coffee" = 30)
 
-/obj/item/reagent_containers/food/drinks/ice
+/obj/item/reagent_containers/food/drinks/mug/teacup/ice
 	name = "Ice Cup"
 	desc = "Careful, cold ice, do not chew."
-	icon_state = "cup"
-	center_of_mass = list("x"=15, "y"=10)
-	base_icon = "cup"
-	filling_states = "100"
 	preloaded_reagents = list("ice" = 30)
 
 /obj/item/reagent_containers/food/drinks/h_chocolate
@@ -190,8 +186,8 @@
 	spawn_tags = SPAWN_TAG_JUNKFOOD
 	rarity_value = 15
 
-/obj/item/reagent_containers/food/drinks/dry_ramen/on_update_icon()
-	if(reagent_flags == OPENCONTAINER)	
+/obj/item/reagent_containers/food/drinks/dry_ramen/update_icon()
+	if(reagent_flags == OPENCONTAINER)
 		if(reagents && reagents.total_volume)
 			icon_state = "ramen_open"
 		else
@@ -205,7 +201,7 @@
 	volume = 10
 	center_of_mass = list("x"=16, "y"=12)
 
-/obj/item/reagent_containers/food/drinks/sillycup/on_update_icon()
+/obj/item/reagent_containers/food/drinks/sillycup/update_icon()
 	if(reagents && reagents.total_volume)
 		icon_state = "water_cup"
 	else
@@ -373,7 +369,6 @@
 	icon_state = "_cup"
 	base_name = "cup"
 	base_icon = "_cup"
-	filling_states = "100"
 
 
 //tea and tea accessories

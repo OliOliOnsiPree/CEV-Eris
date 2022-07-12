@@ -119,7 +119,7 @@
 
 	return ..()
 
-/mob/living/carbon/human/GetVoice()
+/mob/living/carbon/human/GetVoice(mask_check)
 
 	var/voice_sub
 	if(istype(back, /obj/item/rig))
@@ -128,6 +128,10 @@
 		if(rig.speech && rig.speech.voice_holder && rig.speech.voice_holder.active && rig.speech.voice_holder.voice)
 			voice_sub = rig.speech.voice_holder.voice
 	else
+		if(mask_check && wear_mask)
+			var/obj/item/clothing/mask/mask = wear_mask
+			if(istype(mask) && mask.muffle_voice)
+				voice_sub = "Unknown"
 		for(var/obj/item/gear in list(wear_mask, wear_suit, head))
 			if(!gear)
 				continue
@@ -179,10 +183,10 @@
 	return verb
 
 /mob/living/carbon/human/handle_speech_problems(var/message, var/verb)
-	if(silent || (sdisabilities & MUTE))
-		message = ""
-		speech_problem_flag = 1
-	else if(istype(wear_mask, /obj/item/clothing/mask))
+//	if(silent || (sdisabilities & MUTE))
+//		message = ""
+//		speech_problem_flag = 1
+	if(istype(wear_mask, /obj/item/clothing/mask))
 		var/obj/item/clothing/mask/M = wear_mask
 		if(M.voicechange)
 			message = pick(M.say_messages)

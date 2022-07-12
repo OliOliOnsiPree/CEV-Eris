@@ -52,6 +52,9 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	slot_flags = SLOT_EARS
 	attack_verb = list("burnt", "singed")
 	preloaded_reagents = list("sulfur" = 3, "potassium" = 3, "hydrazine" = 3, "carbon" = 5)
+
+	price_tag = 5
+
 	var/burnt = 0
 	var/smoketime = 5
 
@@ -98,6 +101,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	desc = "You're not sure what this is. You should probably ahelp it."
 	body_parts_covered = 0
 	bad_type = /obj/item/clothing/mask/smokable
+	price_tag = 5
 	var/lit = 0
 	var/icon_on
 	var/icon_off
@@ -122,6 +126,13 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	var/turf/location = get_turf(src)
 	smoketime--
 	if(smoketime < 0)
+		if(ishuman(loc))
+			var/mob/living/carbon/human/H = loc
+			if(!H.stat)
+				for(var/obj/item/material/ashtray/A in view(1, loc))
+					if(A.contents.len < A.max_butts)
+						A.attackby(src, loc)
+						return
 		die()
 		return
 	if(location)
@@ -134,6 +145,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			if(ishuman(loc))
 				if (src == C.wear_mask && C.check_has_mouth()) // if it's in the human/monkey mouth, transfer reagents to the mob
 					reagents.trans_to_mob(C, REM, CHEM_INGEST, 0.2) // Most of it is not inhaled... balance reasons.
+					C.regen_slickness() // smoking is cool, but don't try this at home
 			else // else just remove some of the reagents
 				reagents.remove_any(REM)
 
@@ -466,6 +478,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	attack_verb = list("burnt", "singed")
+	price_tag = 20
 	var/base_state
 
 /obj/item/flame/lighter/zippo
@@ -473,6 +486,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	desc = "The zippo."
 	icon_state = "zippo"
 	item_state = "zippo"
+	price_tag = 50
 
 /obj/item/flame/lighter/random
 

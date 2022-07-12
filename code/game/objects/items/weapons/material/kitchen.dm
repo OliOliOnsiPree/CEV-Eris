@@ -30,14 +30,14 @@
 	if(!istype(M))
 		return ..()
 
-	if(user.a_intent != I_HELP)
+/*	if(user.a_intent != I_HELP)
 		if(user.targeted_organ in list(BP_HEAD, BP_EYES))
 			if((CLUMSY in user.mutations) && prob(50))
 				M = user
 			return eyestab(M,user)
 		else
 			return ..()
-
+*/
 	if (reagents.total_volume > 0)
 		if(M == user)
 			if(!M.can_eat(loaded))
@@ -51,7 +51,7 @@
 			M.visible_message(SPAN_NOTICE("\The [user] feeds some [loaded] to \the [M] with \the [src]."))
 			reagents.trans_to_mob(M, reagents.total_volume, CHEM_INGEST)
 		playsound(M.loc,'sound/items/eatfood.ogg', rand(10,40), 1)
-		cut_overlays()
+		overlays.Cut()
 		return
 	else
 		to_chat(user, SPAN_WARNING("You don't have anything on \the [src]."))	//if we have help intent and no food scooped up DON'T STAB OURSELVES WITH THE FORK
@@ -98,10 +98,11 @@
 	thrown_force_divisor = 1 // as above
 
 /obj/item/material/kitchen/rollingpin/attack(mob/living/M as mob, mob/living/user as mob)
-	if ((CLUMSY in user.mutations) && prob(50))
+/*	if ((CLUMSY in user.mutations) && prob(50))
 		to_chat(user, SPAN_WARNING("\The [src] slips out of your hand and hits your head."))
 		user.drop_from_inventory(src)
 		user.take_organ_damage(10)
 		user.Paralyse(2)
 		return
+*/
 	return ..()

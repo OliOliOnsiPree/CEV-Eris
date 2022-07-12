@@ -20,7 +20,7 @@
 	..()
 	playsound(src,'sound/items/Glass_Fragment_drop.ogg',50,1)
 
-/obj/item/reagent_containers/glass/beaker/on_update_icon()
+/obj/item/reagent_containers/glass/beaker/update_icon()
 	cut_overlays()
 
 	if(reagents?.total_volume)
@@ -73,6 +73,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30,60,120,300)
 	lid_icon_state = "lid_beakerbluespace"
 	spawn_blacklisted = TRUE
+	price_tag = 300
 
 /obj/item/reagent_containers/glass/beaker/bowl
 	name = "mixing bowl"
@@ -106,6 +107,9 @@
 	preloaded_reagents = list("uncap nanites" = 30)
 	spawn_blacklisted = TRUE
 
+/obj/item/reagent_containers/glass/beaker/vial/kognim
+	preloaded_reagents = list("kognim" = 30)
+	spawn_blacklisted = TRUE
 
 /obj/item/reagent_containers/glass/beaker/cryoxadone
 	preloaded_reagents = list("cryoxadone" = 30)
@@ -166,13 +170,13 @@
 	else
 		return ..()
 
-/obj/item/reagent_containers/glass/bucket/on_update_icon()
+/obj/item/reagent_containers/glass/bucket/update_icon()
 	cut_overlays()
 	if(reagents.total_volume >= 1)
-		add_overlays("water_bucket")
+		overlays += "water_bucket"
 	if(has_lid())
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
-		add_overlays(lid)
+		overlays += lid
 
 /obj/item/reagent_containers/glass/beaker/hivemind
 	preloaded_reagents = list("nanites" = 30, "uncap nanites" = 30)

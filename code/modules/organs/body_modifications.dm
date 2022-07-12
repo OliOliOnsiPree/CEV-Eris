@@ -66,7 +66,9 @@ var/global/list/modifications_types = list(
 	if(department_specific.len)
 		if(H && H.mind)
 			var/department = H.mind.assigned_job.department
-			if(!department || !department_specific.Find(department))
+			if(!department)
+				return FALSE
+			else if(!department_specific.Find(department))
 				to_chat(usr, "This body-mod does not match your chosen department.")
 				return FALSE
 		else if(P)
@@ -146,11 +148,13 @@ var/global/list/modifications_types = list(
 /datum/body_modification/limb/prosthesis/asters
 	id = "prosthesis_asters"
 	replace_limb = /obj/item/organ/external/robotic/asters
+	body_parts = list(BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG, BP_CHEST, BP_GROIN, BP_HEAD)
 	icon = 'icons/mob/human_races/cyberlimbs/asters.dmi'
 
 /datum/body_modification/limb/prosthesis/serbian
 	id = "prosthesis_serbian"
 	replace_limb = /obj/item/organ/external/robotic/serbian
+	body_parts = list(BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG, BP_CHEST, BP_GROIN, BP_HEAD)
 	icon = 'icons/mob/human_races/cyberlimbs/serbian.dmi'
 
 /datum/body_modification/limb/prosthesis/frozen_star
@@ -175,6 +179,7 @@ var/global/list/modifications_types = list(
 /datum/body_modification/limb/prosthesis/makeshift
 	id = "prosthesis_makeshift"
 	replace_limb = /obj/item/organ/external/robotic/makeshift
+	body_parts = list(BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG, BP_CHEST, BP_GROIN)
 	icon = 'icons/mob/human_races/cyberlimbs/ghetto.dmi'
 
 /datum/body_modification/limb/mutation/New()

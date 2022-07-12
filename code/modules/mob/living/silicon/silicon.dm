@@ -49,6 +49,10 @@
 		AH.unregister_alarm(src)
 	. = ..()
 
+/mob/living/silicon/lay_down()
+	resting = FALSE
+	update_lying_buckled_and_verb_status()
+
 /mob/living/silicon/proc/init_id()
 	if(idcard)
 		return
@@ -72,14 +76,14 @@
 /mob/living/silicon/emp_act(severity)
 	switch(severity)
 		if(1)
-			take_organ_damage(0,20,emp=1)
+			take_organ_damage(0,20,emp=TRUE)
 			Stun(rand(5,10))
 		if(2)
-			take_organ_damage(0,10,emp=1)
+			take_organ_damage(0,10,emp=TRUE)
 			confused = (min(confused + 2, 30))
-//	FLICK("noise", flash)
+//	flick("noise", flash)
 	if (HUDtech.Find("flash"))
-		FLICK("noise", HUDtech["flash"])
+		flick("noise", HUDtech["flash"])
 	to_chat(src, SPAN_DANGER("<B>*BZZZT*</B>"))
 	to_chat(src, SPAN_DANGER("Warning: Electromagnetic pulse detected."))
 	..()
@@ -248,7 +252,7 @@
 /mob/living/silicon/ex_act(severity)
 	if(!blinded)
 		if (HUDtech.Find("flash"))
-			FLICK("flash", HUDtech["flash"])
+			flick("flash", HUDtech["flash"])
 
 	switch(severity)
 		if(1)
@@ -264,6 +268,9 @@
 		if(3)
 			if (stat != 2)
 				adjustBruteLoss(30)
+		if(4)
+			if (stat != 2)
+				adjustBruteLoss(15)
 
 	updatehealth()
 

@@ -36,7 +36,7 @@
 	else if(W.is_refillable())
 		return FALSE //so we can refill them via their afterattack.
 
-	else if(QUALITY_BOLT_TURNING in W.tool_qualities && user.a_intent == I_HELP)
+	else if((QUALITY_BOLT_TURNING in W.tool_qualities) && (user.a_intent == I_HELP))
 		if(W.use_tool(user, src, WORKTIME_NEAR_INSTANT, QUALITY_BOLT_TURNING, FAILCHANCE_EASY,  required_stat = STAT_MEC))
 			src.add_fingerprint(user)
 			if(anchored)
@@ -81,8 +81,10 @@
 				explode()
 				return
 
-
-
+/obj/structure/reagent_dispensers/get_item_cost(export)
+	if(export)
+		return ..() + round(reagents.total_volume * 0.125)
+	return ..() + contents_cost
 
 //Dispensers
 /obj/structure/reagent_dispensers/watertank
@@ -157,11 +159,11 @@
 			usr.visible_message(SPAN_NOTICE("\The [usr] detaches \the [rig] from \the [src]."), SPAN_NOTICE("You detach [rig] from \the [src]"))
 			rig.loc = get_turf(usr)
 			rig = null
-			set_overlays(new/list())
+			overlays = new/list()
 
 /obj/structure/reagent_dispensers/fueltank/attackby(obj/item/I, mob/user)
 	src.add_fingerprint(user)
-	if(QUALITY_SCREW_DRIVING in I.tool_qualities && user.a_intent == I_HURT)
+	if((QUALITY_SCREW_DRIVING in I.tool_qualities) && (user.a_intent == I_HURT))
 		if(I.use_tool(user, src, WORKTIME_FAST, QUALITY_SCREW_DRIVING, FAILCHANCE_EASY,  required_stat = STAT_MEC))
 			user.visible_message("[user] screws [src]'s faucet [modded ? "closed" : "open"].", \
 				"You screw [src]'s faucet [modded ? "closed" : "open"]")
@@ -190,7 +192,7 @@
 			var/icon/test = getFlatIcon(I)
 			test.Shift(NORTH,1)
 			test.Shift(EAST,6)
-			add_overlays(test)
+			overlays += test
 
 	var/obj/item/tool/T = I
 	if(istype(T) && T.use_fuel_cost)
@@ -371,7 +373,7 @@
 		. = ..()
 	update_icon()
 
-/obj/structure/reagent_dispensers/bidon/on_update_icon()
+/obj/structure/reagent_dispensers/bidon/update_icon()
 	cut_overlays()
 	if(lid)
 		var/mutable_appearance/lid_icon = mutable_appearance(icon, "[icon_state]_lid")
