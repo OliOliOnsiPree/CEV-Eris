@@ -12,7 +12,7 @@
 		melee = 8,
 		bullet = 10,
 		energy = 5,
-		bomb = 75,
+		bomb = 200,
 		bio = 100,
 		rad = 50
 	)
@@ -36,8 +36,6 @@
 		/obj/item/rig_module/fabricator/energy_net,
 		/obj/item/rig_module/storage
 		)
-	stiffness = 0
-	obscuration = 0
 
 //Has most of the modules removed
 /obj/item/rig/merc/empty

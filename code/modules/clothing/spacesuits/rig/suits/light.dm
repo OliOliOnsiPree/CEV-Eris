@@ -8,13 +8,12 @@
 		melee = 8,
 		bullet = 5,
 		energy = 5,
-		bomb = 20,
+		bomb = 50,
 		bio = 75,
 		rad = 25
 	)
 	emp_protection = 10
 	slowdown = 0
-	obscuration = 0
 	item_flags = STOPPRESSUREDAMAGE | THICKMATERIAL | DRAG_AND_DROP_UNEQUIP | EQUIP_SOUNDS
 	offline_slowdown = 0
 	offline_vision_restriction = 0
@@ -90,7 +89,7 @@
 		melee = 7,
 		bullet = 5,
 		energy = 0,
-		bomb = 25,
+		bomb = 50,
 		bio = 100,
 		rad = 25
 	)

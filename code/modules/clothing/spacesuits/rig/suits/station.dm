@@ -35,7 +35,7 @@
 		melee = 10,
 		bullet = 10,
 		energy = 0,
-		bomb = 25,
+		bomb = 100,
 		bio = 100,
 		rad = 90
 	)
@@ -82,7 +82,7 @@
 		melee = 9,
 		bullet = 3,
 		energy = 3,
-		bomb = 10,
+		bomb = 25,
 		bio = 100,
 		rad = 100
 	)
@@ -151,9 +151,8 @@ Advanced Voidsuit: Technomancer Exultant
 	req_access = list(access_ce)
 	req_one_access = list()
 	spawn_blacklisted = TRUE//antag_item_targets
-	slowdown = LIGHT_SLOWDOWN
-	stiffness = 0
-	obscuration = 0
+	slowdown = LIGHT_SLOWDOWN * 1.1
+
 
 /obj/item/rig/ce/equipped
 	rarity_value = 40
@@ -246,7 +245,7 @@ Technomancer RIG
 		melee = 0,
 		bullet = 0,
 		energy = 8,
-		bomb = 90,
+		bomb = 350,
 		bio = 100,
 		rad = 100
 	)
@@ -310,8 +309,7 @@ Technomancer RIG
 		/obj/item/stack/medical,
 		/obj/item/roller
 	)
-	slowdown = LIGHT_SLOWDOWN
-	stiffness = MEDIUM_STIFFNESS
+	slowdown = LIGHT_SLOWDOWN * 1.1
 
 /obj/item/rig/medical/equipped
 	req_access = list()
