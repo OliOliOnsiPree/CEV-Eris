@@ -8,7 +8,7 @@
 	taste_mult = 4
 	reagent_state = SOLID
 	metabolism = REM * 2
-	var/nutriment_factor = 12 // Per metabolism tick
+	var/nutriment_factor = 8 // Per metabolism tick
 	var/regen_factor = 0.8 //Used for simple animal health regeneration
 	var/injectable = 0
 	sanity_gain_ingest = 0.3 //well they are a sort of food so, this defines how good eating the thing will make you feel
@@ -95,7 +95,7 @@
 	color = "#FFFFFF"
 	taste_tag = list(TASTE_SLIMEY)
 
-/datum/reagent/organic/nutriment/flour/touch_turf(turf/simulated/T)
+/datum/reagent/organic/nutriment/flour/touch_turf(turf/T)
 	if(!istype(T, /turf/space))
 		new /obj/effect/decal/cleanable/flour(T)
 	return TRUE
@@ -163,11 +163,11 @@
 	taste_description = "slime"
 	taste_mult = 0.1
 	reagent_state = LIQUID
-	nutriment_factor = 8
+	nutriment_factor = 6
 	color = "#302000"
 	taste_tag = list(TASTE_SLIMEY)
 
-/datum/reagent/organic/nutriment/cornoil/touch_turf(turf/simulated/T)
+/datum/reagent/organic/nutriment/cornoil/touch_turf(turf/T)
 	if(!istype(T))
 		return TRUE
 
@@ -198,6 +198,7 @@
 	id = "mint"
 	description = "Also known as Mentha."
 	taste_description = "mint"
+	nutriment_factor = 0.1
 	reagent_state = LIQUID
 	color = "#CF3600"
 	taste_tag = list(TASTE_REFRESHING)
@@ -581,7 +582,6 @@
 	taste_description = "milk"
 	color = "#DFDFDF"
 	taste_tag = list(TASTE_LIGHT)
-
 	glass_unique_appearance = TRUE
 	glass_icon_state = "glass_white"
 	glass_name = "milk"
@@ -598,10 +598,6 @@
 	description = "Dairy product composed of the higher-fat layer skimmed from the top of milk before homogenization."
 	taste_description = "creamy milk"
 	color = "#dfd7af"
-	taste_tag = list(TASTE_LIGHT)
-
-	glass_unique_appearance = TRUE
-	glass_icon_state = "glass_white"
 	glass_name = "cream"
 	glass_desc = "Ewwww..."
 
@@ -611,10 +607,6 @@
 	description = "An opaque white liquid made from soybeans."
 	taste_description = "soy milk"
 	color = "#DFDFC7"
-	taste_tag = list(TASTE_LIGHT)
-
-	glass_unique_appearance = TRUE
-	glass_icon_state = "glass_white"
 	glass_name = "soy milk"
 	glass_desc = "White and nutritious soy goodness!"
 
@@ -879,7 +871,6 @@
 	id = "milkshake"
 	color = "#aee5e4"
 	adj_temp = -9
-	taste_tag = list(TASTE_LIGHT)
 
 	glass_unique_appearance = TRUE
 	glass_icon_state = "milkshake"
@@ -914,7 +905,7 @@
 	color = "#100800"
 	adj_temp = -5
 	adj_sleepy = -2
-	nerve_system_accumulations = 50
+	nerve_system_accumulations = 30
 	taste_tag = list(TASTE_SWEET,TASTE_BUBBLY)
 
 	glass_unique_appearance = TRUE
@@ -925,12 +916,12 @@
 
 /datum/reagent/drink/nuka_cola/affect_ingest(mob/living/carbon/M, alien, effect_multiplier)
 	..()
-	M.add_chemical_effect(CE_SPEEDBOOST, 0.6)
+	M.add_chemical_effect(CE_SPEEDBOOST, 0.2)
+	M.add_chemical_effect(CE_PULSE, 2)
 	M.make_jittery(20 * effect_multiplier)
 	M.druggy = max(M.druggy, 30 * effect_multiplier)
 	M.dizziness += 5 * effect_multiplier
-	M.drowsyness = 0
-	M.apply_effect(0.5 * effect_multiplier, IRRADIATE, 0)
+	M.apply_effect(1 * effect_multiplier, IRRADIATE, 0)
 
 /datum/reagent/drink/grenadine
 	name = "Grenadine Syrup"
@@ -1185,8 +1176,8 @@
 	SEND_SIGNAL_OLD(L, COMSIG_CARBON_HAPPY, src, MOB_DELETE_DRUG)
 
 /datum/reagent/alcohol/affect_blood(mob/living/carbon/M, alien, effect_multiplier)
-	M.add_chemical_effect(CE_TOXIN, toxicity * (issmall(M) ? effect_multiplier * 2 : effect_multiplier))
-	M.add_chemical_effect(CE_PAINKILLER, max(35 - (strength / 2), 1))	//Vodka 32.5 painkiller, beer 15
+	var/datum/reagents/metabolism/met = M.get_metabolism_handler(CHEM_BLOOD)
+	met.add_reagent("ethanol", effect_multiplier / strength * strength_mod * 4)
 
 /datum/reagent/alcohol/affect_ingest(mob/living/carbon/M, alien, effect_multiplier)
 	M.adjustNutrition(nutriment_factor * (issmall(M) ? effect_multiplier * 2 : effect_multiplier))
@@ -1543,6 +1534,7 @@
 	..()
 	M.adjust_hallucination(-0.9 * effect_multiplier)
 	M.add_chemical_effect(CE_TOXIN, -2.5 * effect_multiplier)
+	M.add_chemical_effect(CE_ANTITOX, 4) //two times as good as dylo
 
 // Cocktails
 /datum/reagent/alcohol/acid_spit

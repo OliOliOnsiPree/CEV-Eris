@@ -16,6 +16,8 @@ SUBSYSTEM_DEF(job)
 	var/list/job_debug = list()				//Debug info
 	var/list/job_mannequins = list()				//Cache of icons for job info window
 	var/list/ckey_to_job_to_playtime = list()
+	/// Eris specific stuff , playtimes are based off overall hours , and not on hours in said departament.
+	var/list/ckey_to_total_playtime = list()
 	var/list/ckey_to_job_to_can_play = list()
 	var/list/job_to_playtime_requirement = list()
 	/// DOS Attack prevention by locking off file-reads.
@@ -47,8 +49,6 @@ SUBSYSTEM_DEF(job)
 		else
 			ckey_to_job_to_can_play[ckey][occupation] = CanHaveJob(ckey, occupation)
 
-
-ADMIN_VERB_ADD(/client/verb/whitelistPlayerForJobs, R_ADMIN, FALSE)
 /client/verb/whitelistPlayerForJobs()
 	set category = "Admin"
 	set name = "Allow client to bypass all job requirement playtimes"
@@ -61,7 +61,6 @@ ADMIN_VERB_ADD(/client/verb/whitelistPlayerForJobs, R_ADMIN, FALSE)
 		return
 	SSjob.WhitelistPlayer(the_chosen_one.ckey)
 
-ADMIN_VERB_ADD(/client/verb/unwhitelistPlayerForJobs, R_ADMIN, FALSE)
 /client/verb/unwhitelistPlayerForJobs()
 	set category = "Admin"
 	set name = "Unwhitelist a client from all job requirement playtimes"
@@ -155,7 +154,7 @@ ADMIN_VERB_ADD(/client/verb/unwhitelistPlayerForJobs, R_ADMIN, FALSE)
 					continue
 				if(checking_job.department_flag & wanted_job.department_flag)
 					total_playtime += round(SSinactivity_and_job_tracking[ckey][played_job])
-	if(total_playtime >= job_to_playtime_requirement[job_title])
+	if(total_playtime + ckey_to_total_playtime[ckey] >= job_to_playtime_requirement[job_title])
 		return TRUE
 	else
 		return FALSE
@@ -180,6 +179,9 @@ ADMIN_VERB_ADD(/client/verb/unwhitelistPlayerForJobs, R_ADMIN, FALSE)
 			job_to_playtime_requirement[name] = text2num(value)
 		else if(name)
 			job_to_playtime_requirement[name] = 0
+
+
+
 	/// failsafe for non-existant config folders.
 	for(var/occupation in occupations_by_name)
 		if(!isnum(job_to_playtime_requirement[occupation]))
@@ -193,6 +195,7 @@ ADMIN_VERB_ADD(/client/verb/unwhitelistPlayerForJobs, R_ADMIN, FALSE)
 		return
 	queries_by_key[ckey]++
 	var/savefile/save_data = new("data/player_saves/[copytext(ckey, 1, 2)]/[ckey]/playtimes.sav")
+	var/total_playtime = 0
 	for(var/occupation in occupations_by_name)
 		save_data.cd = occupation
 		if(!length(ckey_to_job_to_playtime[ckey]))
@@ -201,9 +204,11 @@ ADMIN_VERB_ADD(/client/verb/unwhitelistPlayerForJobs, R_ADMIN, FALSE)
 		from_file(save_data["playtime"], value)
 		if(!isnum(value) || !value)
 			value = 0
+		total_playtime += value
 		ckey_to_job_to_playtime[ckey][occupation] = value
 		// return to last directory
 		save_data.cd = ".."
+	ckey_to_total_playtime[ckey] = total_playtime
 
 /datum/controller/subsystem/job/proc/SavePlaytimes(ckey)
 	if(!ckey)
@@ -377,22 +382,16 @@ ADMIN_VERB_ADD(/client/verb/unwhitelistPlayerForJobs, R_ADMIN, FALSE)
 
 				if(age < job.minimum_character_age) // Nope.
 					continue
-
-				switch(age)
-					if(job.minimum_character_age to (job.minimum_character_age+10))
-						weightedCandidates[V] = 3 // Still a bit young.
-					if((job.minimum_character_age+10) to (job.ideal_character_age-10))
-						weightedCandidates[V] = 6 // Better.
-					if((job.ideal_character_age-10) to (job.ideal_character_age+10))
-						weightedCandidates[V] = 10 // Great.
-					if((job.ideal_character_age+10) to (job.ideal_character_age+20))
-						weightedCandidates[V] = 6 // Still good.
-					if((job.ideal_character_age+20) to INFINITY)
-						weightedCandidates[V] = 3 // Geezer.
-					else
-						// If there's ABSOLUTELY NOBODY ELSE
-						if(candidates.len == 1) weightedCandidates[V] = 1
-
+				else if(age <= (job.minimum_character_age + 10))
+					weightedCandidates[V] = 3 // Still a bit young.
+				else if(age <= (job.ideal_character_age - 10))
+					weightedCandidates[V] = 6 // Better.
+				else if(age <= (job.ideal_character_age + 10))
+					weightedCandidates[V] = 10 // Great.
+				else if(age <= (job.ideal_character_age + 20))
+					weightedCandidates[V] = 6 // Still good.
+				else
+					weightedCandidates[V] = 3 // Geezer.
 
 			var/mob/new_player/candidate = pickweight(weightedCandidates)
 			if(AssignRole(candidate, command_position))

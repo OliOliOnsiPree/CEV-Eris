@@ -28,6 +28,7 @@
 		/datum/design/research/item/part/subspace_transmitter,
 		/datum/design/autolathe/part/igniter,						//regular parts
 		/datum/design/autolathe/part/signaler,
+		/datum/design/autolathe/part/door_signaler,
 		/datum/design/autolathe/part/sensor_prox,
 		/datum/design/autolathe/part/consolescreen,
 		/datum/design/autolathe/cell/large/excelsior,				//power cells
@@ -82,7 +83,11 @@
 		/datum/design/autolathe/ammo/shotgun_beanbag,
 		/datum/design/autolathe/ammo/shotgun_pellet,
 		/datum/design/autolathe/sec/silencer,						//misc
+		/datum/design/autolathe/clothing/excel_armor,
+		/datum/design/autolathe/clothing/excel_boots,
+		/datum/design/autolathe/clothing/excel_helmet,
 		/datum/design/autolathe/clothing/excelsior_armor,
+		/datum/design/autolathe/clothing/excel_beret,
 		/datum/design/autolathe/device/excelbaton,					//security
 		/datum/design/autolathe/device/excelsiormine,
 		/datum/design/autolathe/sec/beartrap,

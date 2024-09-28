@@ -103,6 +103,9 @@
 	var/list/component_parts //list of all the parts used to build it, if made from certain kinds of frames.
 	var/uid
 	var/panel_open = 0
+		//0 - panel closed
+		//1 - panel opened
+		//-1 - panel never should be opened (used for NT buildings)
 	var/global/gl_uid = 1
 	var/interact_offline = 0 // Can the machine be interacted with while de-powered.
 	var/obj/item/electronics/circuitboard/circuit
@@ -114,6 +117,7 @@
 	var/area/current_power_area // What area are we powering currently
 
 	var/hacked = FALSE // If this machine has had its access requirements hacked or not
+	var/shipside_only = FALSE // Does this mechanism need to be on the ship? Used for excel
 
 
 /obj/machinery/Initialize(mapload, d=0)
@@ -122,6 +126,8 @@
 		set_dir(d)
 	GLOB.machines += src
 	InitCircuit()
+	power_change()
+	update_power_use()
 	START_PROCESSING(SSmachines, src)
 
 	return INITIALIZE_HINT_LATELOAD
@@ -141,7 +147,8 @@
 	return ..()
 
 /obj/machinery/Process()//If you dont use process or power why are you here
-	return PROCESS_KILL
+	if(!(use_power || idle_power_usage || active_power_usage))
+		return PROCESS_KILL
 
 /obj/machinery/emp_act(severity)
 	if(use_power && !stat)
@@ -168,6 +175,9 @@
 
 /obj/machinery/proc/inoperable(var/additional_flags = 0)
 	return (stat & (NOPOWER|BROKEN|additional_flags))
+
+/obj/machinery/ui_state(mob/user)
+	return GLOB.machinery_state
 
 /obj/machinery/CanUseTopic(mob/user)
 	if(stat & BROKEN)
@@ -296,6 +306,10 @@
 
 //Tool qualities are stored in \code\__defines\tools_and_qualities.dm
 /obj/machinery/proc/default_deconstruction(obj/item/I, mob/user)
+
+	if(panel_open == -1)
+		to_chat(user, SPAN_NOTICE("There are no panels to open on \the [src]."))
+		return FALSE
 
 	var/qualities = list(QUALITY_SCREW_DRIVING)
 
